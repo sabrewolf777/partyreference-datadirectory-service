@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>application</artifactId>
+    <packaging>jar</packaging>
+    
+    <parent>
+        <groupId>ec.com.dinersclub.dddmodules</groupId>
+        <artifactId>partyReferenceDataDirectory</artifactId>
+       <version>0.0.0</version>
+    </parent>
+	
+	<properties>
+		<java.version>21</java.version>
+		<protobuf.version>3.24.0</protobuf.version>
+		<os.plugin.version>1.7.1</os.plugin.version>
+		<protobuf.plugin.version>0.6.1</protobuf.plugin.version>
+		<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+	</properties>
+	
+	
+    <dependencies>
+    	<dependency>
+			<groupId>ec.com.dinersclub.dddmodules.domain</groupId>
+			<artifactId>domain</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ec.com.dinersclub.dddmodules.infrastructure</groupId>
+			<artifactId>infrastructure</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        
+	   <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		
+		
+    <!-- https://mvnrepository.com/artifact/jakarta.enterprise.concurrent/jakarta.enterprise.concurrent-api -->
+		<dependency>
+		    <groupId>jakarta.enterprise.concurrent</groupId>
+		    <artifactId>jakarta.enterprise.concurrent-api</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
+    
+    	<!-- https://mvnrepository.com/artifact/jakarta.enterprise.concurrent/jakarta.enterprise.concurrent.parent -->
+		<dependency>
+		    <groupId>jakarta.enterprise.concurrent</groupId>
+		    <artifactId>jakarta.enterprise.concurrent.parent</artifactId>
+		    <version>3.1.0</version>
+		    <type>pom</type>
+		</dependency>
+			<!-- gRPC Spring Boot Starter -->
+		<dependency>
+			<groupId>net.devh</groupId>
+			<artifactId>grpc-server-spring-boot-starter</artifactId>
+			<version>2.15.0.RELEASE</version>
+		</dependency>
+
+		<!-- gRPC Protobuf -->
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>1.68.0</version>
+		</dependency>
+
+		<!-- gRPC Stub -->
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>1.68.0</version>
+		</dependency>
+		
+		<!-- gRPC netty-shaded -->
+		<dependency>
+	        <groupId>io.grpc</groupId>
+	        <artifactId>grpc-netty-shaded</artifactId>
+	        <version>1.68.0</version>
+	    </dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>javax.annotation-api</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.google.protobuf</groupId>
+		    <artifactId>protoc</artifactId>
+		    <version>3.11.4</version>
+		    <type>pom</type>
+		</dependency>
+
+	   <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>annotations-api</artifactId>
+        <version>6.0.53</version>
+        <scope>provided</scope>
+   		 </dependency>
+   		
+   		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		</dependency>
+		
+    </dependencies>
+ 
+ 	   <build>
+ 	   <finalName>application</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                	<mainClass>ec.com.dinersclub.dddmodules.Application</mainClass>
+                	<jvmArguments>-Duser.timezone=America/Mexico_City</jvmArguments>
+                    <image>
+                        <builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
+                    </image>
+                    <aot>
+						<excludes>
+							<exclude>
+								<groupId>ec.com.dinersclub.dddmodules.application.grpc</groupId>
+								<artifactId>UsageLog$Builder</artifactId>
+							</exclude>
+						</excludes>
+					</aot>
+                </configuration>
+            </plugin>
+            
+           
+
+				 <plugin>
+			      <artifactId>maven-assembly-plugin</artifactId>
+			      <configuration>
+			        <archive>
+			          <manifest>
+                	<mainClass>ec.com.dinersclub.dddmodules.Application</mainClass>
+			          </manifest>
+			        </archive>
+			        <descriptorRefs>
+			          <descriptorRef>jar-with-dependencies</descriptorRef>
+			        </descriptorRefs>
+			      </configuration>
+			      <executions>
+			        <execution>
+			          <id>make-assembly</id> <!-- this is used for inheritance merges -->
+			          <phase>package</phase> <!-- bind to the packaging phase -->
+			          <goals>
+			            <goal>single</goal>
+			          </goals>
+			        </execution>
+			      </executions>
+			    </plugin>
+			    
+			    <plugin>
+	               <groupId>com.google.protobuf</groupId>
+	               <artifactId>protobuf-maven-plugin</artifactId>
+	               <version>3.21.9</version> <!-- Cambia a la versión más reciente -->
+	           </plugin>	
+
+        </plugins>
+			        
+        <extensions>
+			<!-- OS Detection -->
+	        <extension>
+	            <groupId>kr.motd.maven</groupId>
+	            <artifactId>os-maven-plugin</artifactId>
+	            <version>${os.plugin.version}</version>
+	        </extension>  
+	    </extensions>
+    </build>
+ 	
+ 	<profiles>
+		<profile>
+			<id>debug</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>ec.com.dinersclub.dddmodules.Application</mainClass>
+						</configuration>
+					</plugin>
+				</plugins>
+				<finalName>application</finalName>
+			</build>
+		</profile>
+	</profiles>
+ 	
+ 	
+</project> 
