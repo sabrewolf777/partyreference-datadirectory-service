@@ -8,7 +8,11 @@ server:
   port: 8081
   servlet:
     context-path: /experience/customerManagement/partyReferenceDataDirectory
-    
+grpc:
+  server:
+    port: 9090
+    address: 0.0.0.0
+        
 mvc:
 pathmatch:
 matching-strategy: ant_path_matcher

@@ -25,6 +25,8 @@ public class PRDataDirectoryRestClientImpl implements PRDataDirectoryRestClient{
 	
 	public RecEvaluateCorporateProfileRs corporateProfileValidate(RecEvaluateCorporateProfileRq request, HttpHeaders headers) {
 		
+		log.info(" ::: corporateProfileValidate ::: ");
+		
 		final RestTemplate restTemplate= new RestTemplate();
 		
 		final HttpHeaders hdrs = new HttpHeaders();

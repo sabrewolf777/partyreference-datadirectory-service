@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_package = "ec.com.dinersclub.dddmodules.application.grpc";
+option java_multiple_files = true;
+
+message RecEvaluateCorporateProfileRequest {
+    PartyReference partyReference = 1;
+
+    message PartyReference {
+        repeated Identification identifications = 1;
+
+        message Identification {
+            Identifier identifier = 1;
+            int32 personIdentificationType = 2;
+
+            message Identifier {
+                string identifierValue = 1;
+            }
+        }
+    }
+}
+
+message RecEvaluateCorporateProfileResponse {
+    PartyReference partyReference = 1;
+    StatusInstanceRecord statusInstanceRecord = 2;
+
+    message PartyReference {
+        bool corporateCustomer = 1;
+    }
+
+    message StatusInstanceRecord {
+        string statusType = 1;
+        string transactionDate = 2;
+        string status = 3;
+        string statusCode = 4;
+        string providerCode = 5;
+        string message = 6;
+        string description = 7;
+    }
+}
+
+service CorporateProfileService {
+    rpc CorporateProfileValidate(RecEvaluateCorporateProfileRequest) returns (RecEvaluateCorporateProfileResponse);
+}
