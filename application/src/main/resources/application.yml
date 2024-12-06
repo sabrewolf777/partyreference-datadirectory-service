@@ -33,8 +33,8 @@ management:
     health:
       show-details: always 
 
-msd.seg.verify.person.api.url: https://localhost:8082/seguridad/v1/cliente/personasnaturales/tiene-ruc
-
+msd.seg.verify.person.api.url: http://localhost:8082/seguridad/v1/cliente/personasnaturales/tiene-ruc
+msd.seg.cli.usuario.creacion:  http://localhost:8082/seguridad/v1/cliente/usuario/crear
 ---
 
 spring:
@@ -69,7 +69,7 @@ management:
       show-details: always 
 
 msd.seg.verify.person.api.url: https://${MSD_SEG_VERIFY_PERSON_URL}/seguridad/v1/cliente/personasnaturales/tiene-ruc
-
+msd.seg.cli.usuario.creacion:  https://${MSD_SEG_CLI_USER_CREATE}/seguridad/v1/cliente/usuario/crear
 ---
 
 spring:
@@ -104,7 +104,7 @@ management:
       show-details: always 
 
 msd.seg.verify.person.api.url: https://${MSD_SEG_VERIFY_PERSON_URL}/seguridad/v1/cliente/personasnaturales/tiene-ruc
-
+msd.seg.cli.usuario.creacion:  https://${MSD_SEG_CLI_USER_CREATE}/seguridad/v1/cliente/usuario/crear
 ---
 
 spring:
@@ -139,4 +139,4 @@ management:
       show-details: always 
 
 msd.seg.verify.person.api.url: https://${MSD_SEG_VERIFY_PERSON_URL}/seguridad/v1/cliente/personasnaturales/tiene-ruc
-
+msd.seg.cli.usuario.creacion:  https://${MSD_SEG_CLI_USER_CREATE}/seguridad/v1/cliente/usuario/crear
