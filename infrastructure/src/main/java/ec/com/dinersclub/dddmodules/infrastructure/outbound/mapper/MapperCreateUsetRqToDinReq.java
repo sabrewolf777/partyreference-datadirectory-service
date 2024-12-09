@@ -27,17 +27,24 @@ public class MapperCreateUsetRqToDinReq {
 		
 		DinBody dinBody= new DinBody();
 		
-		if(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getContactPoint()[0].getContactPointType().equals("Cellphone")) {
-			dinBody.setCelular(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getContactPoint()[0].getContactPointValue());
-		}else {
-			dinBody.setCorreo(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getContactPoint()[0].getContactPointValue());
+		for(int x=0; x < request.getPartyReferenceDataDirectoryEntry().getPartyReference().getContactPoint().length;x++) {
+			if(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getContactPoint()[x].getContactPointType().equals("Cellphone")) {
+				dinBody.setCelular(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getContactPoint()[x].getContactPointValue());
+			}else {
+				dinBody.setCorreo(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getContactPoint()[x].getContactPointValue());
+			}
 		}
 		
 		dinBody.setNombreUsuario(request.getUsername());
-		dinBody.setClave(request.getPasswordInstanceRecord().getAuthenticationPasswordStoredValue());
-		dinBody.setClaveMobile(request.getPasswordInstanceRecord().getAuthenticationMobilePassword());
-		dinBody.setNroIdentificacion(Long.parseLong(request.getPartyReferenceDataDirectoryEntry().getPartyReference()
-				 					 .getIdentifications()[0].getIdentifier().getIdentifierValue()));
+		dinBody.setClave(request.getPasswordInstanceRecord()!=null ? request.getPasswordInstanceRecord().getAuthenticationPasswordStoredValue() : "");
+		dinBody.setClaveMobile(request.getPasswordInstanceRecord()!=null ? request.getPasswordInstanceRecord().getAuthenticationMobilePassword() : "");
+		
+		for(int x=0; x < request.getPartyReferenceDataDirectoryEntry().getPartyReference().getIdentifications().length;x++) {
+			dinBody.setNroIdentificacion(Long.parseLong(request.getPartyReferenceDataDirectoryEntry().getPartyReference()
+															   .getIdentifications()[x].getIdentifier().getIdentifierValue()));
+		}
+		
+		
 		dinBody.setNumeroDeInversion(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getPartyProfile().getInvestmentNumber());
 		dinBody.setPerfil(request.getPartyReferenceDataDirectoryEntry().getPartyReference().getPartyType());
 		dinBody.setEsPersonaNaturalConRUC(request.getPartyReferenceDataDirectoryEntry().getPartyReference().isCorporateCustomer());
@@ -54,6 +61,7 @@ public class MapperCreateUsetRqToDinReq {
 		dinBody.setCreacionPrevia(request.getTokenAssignment().isPreviousToken());
 		dinBody.setToken(request.getTokenAssignment().getTokenIdentificationCode().getIdentifierValue().getValue());
 		dinBody.setCodigoDactilar(request.getBiometricInstanceRecord().getAuthenticationBiometricRecord());
+		
 		for(int x=0; x < request.getPartyLegalEntityReference().getOrganisation().getOrganisationIdentification().length; x++) {
 			dinBody.setRucEmpresa(request.getPartyLegalEntityReference().getOrganisation().getOrganisationIdentification()[x].getIdentifier().getIdentifierValue());
 		}

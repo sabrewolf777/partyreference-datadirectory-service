@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+import "validate.proto"; // Asegúrate de que este archivo esté importado
+option java_package = "ec.com.dinersclub.dddmodules.application.grpc";
+option java_multiple_files = true;
+
+message RecRegisterPartyReferenceDataDirectoryEntryRequest {
+    string username = 1;
+    PasswordInstanceRecord passwordInstanceRecord = 2;
+    PartyReferenceDataDirectoryEntry partyReferenceDataDirectoryEntry = 3;
+    string temporaryUserName = 4;
+    repeated Association associations = 5;
+    string authenticationMethod = 6;
+    TokenAssignment tokenAssignment = 7;
+    BiometricInstanceRecord biometricInstanceRecord = 8;
+    PartyLegalEntityReference partyLegalEntityReference = 9;
+    string sourceRequest = 10;
+
+    message PasswordInstanceRecord {
+        string authenticationPasswordStoredValue = 1;
+        string authenticationMobilePassword = 2;
+    }
+
+    message PartyReferenceDataDirectoryEntry {
+        PartyReference partyReference = 1;
+    }
+
+    message PartyReference {
+        repeated Identification identifications = 1;
+        PartyProfile partyProfile = 2;
+        string partyType = 3;
+        repeated ContactPoint contactPoint = 4;
+        bool corporateCustomer = 5;
+    }
+
+    message Identification {
+        Identifier identifier = 1;
+    }
+
+    message Identifier {
+        string identifierValue = 1;
+    }
+
+    message PartyProfile {
+        string investmentNumber = 1;
+    }
+
+    message ContactPoint {
+        string contactPointValue = 1;
+        string contactPointType = 2;
+    }
+
+    message Association {
+        ProductInstanceRecord productInstanceRecord = 1;
+    }
+
+    message ProductInstanceRecord {
+        PaymentCard paymentCard = 1;
+    }
+
+    message PaymentCard {
+        string cardNumber = 1;
+        string cardExpiryDate = 2;
+        string cardSecurityCode = 3;
+    }
+
+    message TokenAssignment {
+        bool previousToken = 1;
+        TokenIdentificationCode tokenIdentificationCode = 2;
+    }
+
+    message TokenIdentificationCode {
+        IdentifierValue identifierValue = 1;
+    }
+
+    message IdentifierValue {
+        string value = 1;
+    }
+
+    message BiometricInstanceRecord {
+        string authenticationBiometricRecord = 1;
+    }
+
+    message PartyLegalEntityReference {
+        Organisation organisation = 1;
+    }
+
+    message Organisation {
+        repeated OrganisationIdentification organisationIdentification = 1;
+    }
+
+    message OrganisationIdentification {
+        Identifier identifier = 1;
+    }
+}
+
+message RecRegisterPartyReferenceDataDirectoryEntryResponse {
+    PartyReferenceDataDirectoryEntry partyReferenceDataDirectoryEntry = 1;
+    DocumentInstanceRecord documentInstanceRecord = 2;
+    string applicationCode = 3;
+    StatusInstanceRecord statusInstanceRecord = 4;
+
+    message PartyReferenceDataDirectoryEntry {
+        string directoryEntryStatus = 1;
+        PartyReference partyReference = 2;
+        DirectoryEntryDate directoryEntryDate = 3;
+    }
+
+    message PartyReference {
+        string referenceId = 1;
+    }
+
+    message DirectoryEntryDate {
+        string directoryEntryValueDate = 1;
+        string directoryEntryValueTime = 2;
+    }
+
+    message DocumentInstanceRecord {
+        string documentContent = 1;
+    }
+
+    message StatusInstanceRecord {
+        string statusType = 1;
+        string transactionDate = 2;
+        string status = 3;
+        string statusCode = 4;
+        string providerCode = 5;
+        string message = 6;
+        string description = 7;
+    }
+}
+
+service CreateUserService {
+    rpc createUser(RecRegisterPartyReferenceDataDirectoryEntryRequest) returns (RecRegisterPartyReferenceDataDirectoryEntryResponse);
+}
